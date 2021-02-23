@@ -1,5 +1,5 @@
 import sys
-import PyQt5.QtWidgets as QtWidgets
+from PyQt5 import Qt, QtWidgets, QtCore
 from MapRequest import get_map_image
 
 
@@ -30,12 +30,6 @@ class MainApp(QtWidgets.QWidget):
         self.frame_for_picture.setGeometry(0, 0, self.width, self.height - 20)
         self.frame_for_picture.setStyleSheet('background: white')
 
-        # Кнопка поиска
-        self.btn_search = QtWidgets.QPushButton(self)
-        self.btn_search.setGeometry(0, 0, self.width, 40)
-        self.btn_search.setText('Найти!')
-        self.btn_search.clicked.connect(self.search)
-
         # Рамка для отображения информации
         self.frame_settings_for_search = QtWidgets.QFrame(self)
         self.frame_settings_for_search.setGeometry(0, self.height - 20,
@@ -47,6 +41,9 @@ class MainApp(QtWidgets.QWidget):
         self.lbl_y.setGeometry(100, self.height - 20, 100, 20)
         self.lbl_delta = QtWidgets.QLabel(self)
         self.lbl_delta.setGeometry(200, self.height - 20, 100, 20)
+
+        # Отобазим картинку
+        self.search()
 
     def search(self):
         # Получаемся картинку
@@ -63,6 +60,28 @@ class MainApp(QtWidgets.QWidget):
 
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
+
+    def cmd_key_up(self):
+        # Уменьшаем отдаление
+        self.delta -= 0.001
+        if self.delta <= 0.5:
+            self.delta = 0.5
+
+        # Отобразим картинку
+        self.search()
+
+    def cmd_key_down(self):
+        # Увеличиваем отдаление
+        self.delta += 0.001
+        if self.delta <= 0:
+            self.delta = 0.001
+
+        # Отобразим картинку
+        self.search()
+
+    def keyPressEvent(self, e):
+        if e.type() == QtCore.QEvent.KeyPress:  # Если кнопку нажали
+            print('kk')
 
 
 if __name__ == '__main__':
