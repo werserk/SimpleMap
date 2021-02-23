@@ -2,6 +2,9 @@ import sys
 from PyQt5 import Qt, QtWidgets, QtCore
 from MapRequest import get_map_image
 
+KEY_UP = 16777235
+KEY_DOWN = 16777237
+
 
 class MainApp(QtWidgets.QWidget):
     def __init__(self):
@@ -60,6 +63,30 @@ class MainApp(QtWidgets.QWidget):
 
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
+
+    def cmd_key_up(self):
+        # Уменьшаем отдаление
+        self.delta -= 0.001
+        if self.delta > 0.5:
+            self.delta = 0.5
+
+        # Отобразим картинку
+        self.search()
+
+    def cmd_key_down(self):
+        # Увеличиваем отдаление
+        self.delta += 0.001
+        if self.delta < 0:
+            self.delta = 0
+
+        # Отобразим картинку
+        self.search()
+
+    def keyPressEvent(self, e):
+        if e.key() == KEY_UP:
+            self.cmd_key_up()
+        elif e.key() == KEY_DOWN:
+            self.cmd_key_down()
 
 
 if __name__ == '__main__':
