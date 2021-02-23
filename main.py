@@ -82,10 +82,11 @@ class MainApp(QtWidgets.QWidget):
         # Отобразим картинку
         self.search()
 
-    def keyPressEvent(self, e):
-        if e.key() == KEY_UP:
+    def wheelEvent(self, e):
+        # Прокрутка колёсика мыши
+        if e.angleDelta().y() > 0:
             self.cmd_key_up()
-        elif e.key() == KEY_DOWN:
+        elif e.angleDelta().y() < 0:
             self.cmd_key_down()
 
 
