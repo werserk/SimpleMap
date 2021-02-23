@@ -1,0 +1,3 @@
+Packages to download:
+> PyQt5 - 5.15.2
+> requests - 2.25.1

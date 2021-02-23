@@ -8,7 +8,7 @@ class MainApp(QtWidgets.QWidget):
         super().__init__()
 
         # Основные параметры
-        self.map_size = 500  # Если слишком большой(маленький) размер каринки, то изменить здесь
+        self.map_size = 600  # Если слишком большой(маленький) размер каринки, то изменить здесь
         self.x = 37.621094
         self.y = 55.7536
         self.delta = 0.005  # Коэффицент отдаления
@@ -40,7 +40,6 @@ class MainApp(QtWidgets.QWidget):
         self.frame_settings_for_search = QtWidgets.QFrame(self)
         self.frame_settings_for_search.setGeometry(0, self.height - 20,
                                                    self.width, 20)
-
         # Информация о карте
         self.lbl_x = QtWidgets.QLabel(self)
         self.lbl_x.setGeometry(0, self.height - 20, 100, 20)
