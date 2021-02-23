@@ -2,7 +2,9 @@ import sys
 from PyQt5 import Qt, QtWidgets, QtCore
 from MapRequest import get_map_image
 
+KEY_LEFT = 16777234
 KEY_UP = 16777235
+KEY_RIGHT = 16777236
 KEY_DOWN = 16777237
 
 
@@ -25,7 +27,7 @@ class MainApp(QtWidgets.QWidget):
         self.height = self.map_size - 60
         self.setGeometry(0, 0, self.width, self.height)
         self.setFixedSize(self.size())
-        self.setStyleSheet('background: lightblue')
+        self.setStyleSheet('background: lightgray')
         self.setWindowTitle('Карты')
 
         # Рамка для картинки
@@ -64,7 +66,7 @@ class MainApp(QtWidgets.QWidget):
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
 
-    def cmd_key_up(self):
+    def cmd_wheel_up(self):
         # Уменьшаем отдаление
         self.delta -= 0.001
         if self.delta > 0.5:
@@ -73,7 +75,7 @@ class MainApp(QtWidgets.QWidget):
         # Отобразим картинку
         self.search()
 
-    def cmd_key_down(self):
+    def cmd_wheel_down(self):
         # Увеличиваем отдаление
         self.delta += 0.001
         if self.delta < 0:
@@ -82,12 +84,39 @@ class MainApp(QtWidgets.QWidget):
         # Отобразим картинку
         self.search()
 
+    def cmd_key_left(self):
+        self.x -= 2 * self.delta
+        self.search()
+
+    def cmd_key_right(self):
+        self.x += 2 * self.delta
+        self.search()
+
+    def cmd_key_up(self):
+        self.y += 1.5 * self.delta
+        self.search()
+
+    def cmd_key_down(self):
+        self.y -= 1.5 * self.delta
+        self.search()
+
+    def keyPressEvent(self, e):
+        if e.type() == QtCore.QEvent.KeyPress:
+            if e.key() == KEY_LEFT:
+                self.cmd_key_left()
+            if e.key() == KEY_RIGHT:
+                self.cmd_key_right()
+            if e.key() == KEY_UP:
+                self.cmd_key_up()
+            if e.key() == KEY_DOWN:
+                self.cmd_key_down()
+
     def wheelEvent(self, e):
         # Прокрутка колёсика мыши
         if e.angleDelta().y() > 0:
-            self.cmd_key_up()
+            self.cmd_wheel_up()
         elif e.angleDelta().y() < 0:
-            self.cmd_key_down()
+            self.cmd_wheel_down()
 
 
 if __name__ == '__main__':
