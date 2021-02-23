@@ -61,28 +61,6 @@ class MainApp(QtWidgets.QWidget):
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
 
-    def cmd_key_up(self):
-        # Уменьшаем отдаление
-        self.delta -= 0.001
-        if self.delta <= 0.5:
-            self.delta = 0.5
-
-        # Отобразим картинку
-        self.search()
-
-    def cmd_key_down(self):
-        # Увеличиваем отдаление
-        self.delta += 0.001
-        if self.delta <= 0:
-            self.delta = 0.001
-
-        # Отобразим картинку
-        self.search()
-
-    def keyPressEvent(self, e):
-        if e.type() == QtCore.QEvent.KeyPress:  # Если кнопку нажали
-            print('kk')
-
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
