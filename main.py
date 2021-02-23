@@ -16,7 +16,8 @@ class MainApp(QtWidgets.QWidget):
         self.map_size = 600  # Если слишком большой(маленький) размер каринки, то изменить здесь
         self.x = 37.621094
         self.y = 55.7536
-        self.delta = 0.005  # Коэффицент отдаления
+        self.z = 16
+        self.map_type = 'map'
 
         # Инициализация окна
         self.initUI()
@@ -30,9 +31,12 @@ class MainApp(QtWidgets.QWidget):
         self.setStyleSheet('background: lightgray')
         self.setWindowTitle('Карты')
 
+        # Изменение вида карты
+        self.types_of_map = ['map', 'sat', 'sat,skl']
+
         # Рамка для картинки
         self.frame_for_picture = QtWidgets.QLabel(self)
-        self.frame_for_picture.setGeometry(0, 0, self.width, self.height - 20)
+        self.frame_for_picture.setGeometry(0, 30, self.width, self.height - 20 - 30)
         self.frame_for_picture.setStyleSheet('background: white')
 
         # Рамка для отображения информации
@@ -40,19 +44,19 @@ class MainApp(QtWidgets.QWidget):
         self.frame_settings_for_search.setGeometry(0, self.height - 20,
                                                    self.width, 20)
         # Информация о карте
-        self.lbl_x = QtWidgets.QLabel(self)
-        self.lbl_x.setGeometry(0, self.height - 20, 100, 20)
-        self.lbl_y = QtWidgets.QLabel(self)
-        self.lbl_y.setGeometry(100, self.height - 20, 100, 20)
-        self.lbl_delta = QtWidgets.QLabel(self)
-        self.lbl_delta.setGeometry(200, self.height - 20, 100, 20)
+        self.lbl_x = QtWidgets.QLabel(self.frame_settings_for_search)
+        self.lbl_x.setGeometry(0, 0, 100, 20)
+        self.lbl_y = QtWidgets.QLabel(self.frame_settings_for_search)
+        self.lbl_y.setGeometry(100, 0, 100, 20)
+        self.lbl_z = QtWidgets.QLabel(self.frame_settings_for_search)
+        self.lbl_z.setGeometry(200, 0, 100, 20)
 
         # Отобазим картинку
         self.search()
 
     def search(self):
         # Получаемся картинку
-        pixmap = get_map_image(self.x, self.y, self.delta)
+        pixmap = get_map_image(self.x, self.y, self.z, self.map_type)
         resize_coef = min(self.frame_for_picture.width() / pixmap.width(),
                           self.frame_for_picture.height() / pixmap.height())
         pixmap = pixmap.scaled(int(pixmap.width() * resize_coef),
@@ -61,43 +65,41 @@ class MainApp(QtWidgets.QWidget):
         # Отображаем параметры
         self.lbl_x.setText(f'x: {round(self.x, 5)}')
         self.lbl_y.setText(f'y: {round(self.y, 5)}')
-        self.lbl_delta.setText(f'delta: {round(self.delta, 5)}')
+        self.lbl_z.setText(f'size_coef: {round(self.z)}')
 
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
 
     def cmd_wheel_up(self):
-        # Уменьшаем отдаление
-        self.delta -= 0.001
-        if self.delta > 0.5:
-            self.delta = 0.5
+        self.z += 1
+        if self.z >= 17:
+            self.z = 17
 
         # Отобразим картинку
         self.search()
 
     def cmd_wheel_down(self):
-        # Увеличиваем отдаление
-        self.delta += 0.001
-        if self.delta < 0:
-            self.delta = 0
+        self.z -= 1
+        if self.z <= 0:
+            self.z = 0
 
         # Отобразим картинку
         self.search()
 
     def cmd_key_left(self):
-        self.x -= 2 * self.delta
+        self.x -= 1 / self.z
         self.search()
 
     def cmd_key_right(self):
-        self.x += 2 * self.delta
+        self.x += 1 / self.z
         self.search()
 
     def cmd_key_up(self):
-        self.y += 1.5 * self.delta
+        self.y += 1 / self.z
         self.search()
 
     def cmd_key_down(self):
-        self.y -= 1.5 * self.delta
+        self.y -= 1 / self.z
         self.search()
 
     def keyPressEvent(self, e):

@@ -3,16 +3,16 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QByteArray
 
 
-def get_map_image(toponym_longtitude, toponym_lattitude, delta):
-    delta = str(delta)
+def get_map_image(toponym_longtitude, toponym_lattitude, z, map_type):
+    z = str(z)
     toponym_longtitude = str(toponym_longtitude)
     toponym_lattitude = str(toponym_lattitude)
 
     # Параметры для получения картинки
     map_params = {
         'll': ','.join([toponym_longtitude, toponym_lattitude]),
-        'spn': ','.join([delta, delta]),
-        'l': 'map'
+        'l': map_type,
+        'z': z
     }
 
     # Сервер
