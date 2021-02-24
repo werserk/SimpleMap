@@ -18,7 +18,7 @@ class MainApp(QtWidgets.QWidget):
         self.y = 55.723587
         self.coords_for_dota = self.x, self.y
         self.z = 16
-        self.map_type = 'sat,skl'
+        self.map_type = 'map'
 
         # Инициализация окна
         self.initUI()
@@ -33,7 +33,10 @@ class MainApp(QtWidgets.QWidget):
         self.setWindowTitle('Карты')
 
         # Изменение вида карты
-        self.types_of_map = ['map', 'sat', 'sat,skl']
+        self.combo_box_map_types = QtWidgets.QComboBox(self)
+        self.combo_box_map_types.setGeometry(self.width - 80, 0, 80, 30)
+        self.combo_box_map_types.addItems(['map', 'sat', 'sat,skl'])
+        self.combo_box_map_types.activated[str].connect(self.onActivated)
 
         # Рамка для картинки
         self.frame_for_picture = QtWidgets.QLabel(self)
@@ -70,6 +73,10 @@ class MainApp(QtWidgets.QWidget):
 
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
+
+    def onActivated(self, text):
+        self.map_type = text
+        self.search()
 
     def cmd_wheel_up(self):
         self.z += 1

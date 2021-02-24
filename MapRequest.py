@@ -13,7 +13,7 @@ def get_map_image(coords, z, map_type, coords_for_dota):
     # Параметры для получения картинки
     map_params = {
         'll': coords,
-        'pt': coords_for_dota + ',pm2am',
+        # 'pt': coords_for_dota + ',pm2am',
         'l': map_type,
         'z': z
     }
@@ -31,6 +31,5 @@ def get_map_image(coords, z, map_type, coords_for_dota):
         pixmap.loadFromData(payload, "JPG")
     else:
         pixmap.loadFromData(payload, "PNG")
-    print(pixmap.size())
 
     return pixmap
