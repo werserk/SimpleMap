@@ -3,14 +3,17 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QByteArray
 
 
-def get_map_image(toponym_longtitude, toponym_lattitude, z, map_type):
+def get_map_image(coords, z, map_type, coords_for_dota):
     z = str(z)
-    toponym_longtitude = str(toponym_longtitude)
-    toponym_lattitude = str(toponym_lattitude)
+    coords_for_dota = ','.join((str(coords_for_dota[0]),
+                                str(coords_for_dota[1])))
+    coords = ','.join((str(coords[0]),
+                       str(coords[1])))
 
     # Параметры для получения картинки
     map_params = {
-        'll': ','.join([toponym_longtitude, toponym_lattitude]),
+        'll': coords,
+        'pt': coords_for_dota + ',pm2am',
         'l': map_type,
         'z': z
     }
@@ -24,6 +27,10 @@ def get_map_image(toponym_longtitude, toponym_lattitude, z, map_type):
     # Перевод ответа в картинку
     payload = QByteArray(response.content)
     pixmap = QPixmap()
-    pixmap.loadFromData(payload, "PNG")
+    if map_type != 'map':
+        pixmap.loadFromData(payload, "JPG")
+    else:
+        pixmap.loadFromData(payload, "PNG")
+    print(pixmap.size())
 
     return pixmap

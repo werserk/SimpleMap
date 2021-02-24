@@ -16,8 +16,9 @@ class MainApp(QtWidgets.QWidget):
         self.map_size = 600  # Если слишком большой(маленький) размер каринки, то изменить здесь
         self.x = 37.527256
         self.y = 55.723587
+        self.coords_for_dota = self.x, self.y
         self.z = 16
-        self.map_type = 'map'
+        self.map_type = 'sat,skl'
 
         # Инициализация окна
         self.initUI()
@@ -56,7 +57,7 @@ class MainApp(QtWidgets.QWidget):
 
     def search(self):
         # Получаемся картинку
-        pixmap = get_map_image(self.x, self.y, self.z, self.map_type)
+        pixmap = get_map_image((self.x, self.y), self.z, self.map_type, self.coords_for_dota)
         resize_coef = min(self.frame_for_picture.width() / pixmap.width(),
                           self.frame_for_picture.height() / pixmap.height())
         pixmap = pixmap.scaled(int(pixmap.width() * resize_coef),
