@@ -14,8 +14,8 @@ class MainApp(QtWidgets.QWidget):
 
         # Основные параметры
         self.map_size = 600  # Если слишком большой(маленький) размер каринки, то изменить здесь
-        self.x = 37.621094
-        self.y = 55.7536
+        self.x = 37.527256
+        self.y = 55.723587
         self.z = 16
         self.map_type = 'map'
 
@@ -65,7 +65,7 @@ class MainApp(QtWidgets.QWidget):
         # Отображаем параметры
         self.lbl_x.setText(f'x: {round(self.x, 5)}')
         self.lbl_y.setText(f'y: {round(self.y, 5)}')
-        self.lbl_z.setText(f'size_coef: {round(self.z)}')
+        self.lbl_z.setText(f'size_coef: {round(self.z / 17, 5)}')
 
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
