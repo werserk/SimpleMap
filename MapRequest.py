@@ -38,18 +38,19 @@ def get_map_coords(text):
 
 def get_map_image(coords, z, map_type, coords_for_dota):
     z = str(z)
-    coords_for_dota = ','.join((str(coords_for_dota[0]),
-                                str(coords_for_dota[1])))
     coords = ','.join((str(coords[0]),
                        str(coords[1])))
 
     # Параметры для получения картинки
     map_params = {
         'll': coords,
-        'pt': coords_for_dota + ',pm2am',
         'l': map_type,
         'z': z
     }
+    if coords_for_dota is not None:
+        coords_for_dota = ','.join((str(coords_for_dota[0]),
+                                    str(coords_for_dota[1])))
+        map_params['pt'] = coords_for_dota + ',pm2am'
 
     # Сервер
     map_api_server = 'http://static-maps.yandex.ru/1.x/'

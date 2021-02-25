@@ -29,7 +29,7 @@ class MainApp(QtWidgets.QWidget):
     def initUI(self):
         # Настройки окна
         self.width = self.map_size
-        self.height = self.map_size - 60
+        self.height = self.map_size - 30
         self.setGeometry(0, 0, self.width, self.height)
         self.setFixedSize(self.size())
         self.setStyleSheet('background: lightgray')
@@ -38,23 +38,28 @@ class MainApp(QtWidgets.QWidget):
         # Поиск объекта на карте
         self.edt_find_toponym = QtWidgets.QLineEdit(self)
         self.edt_find_toponym.setText(self.toponym)
-        self.edt_find_toponym.setGeometry(0, 0, 450, 30)
+        self.edt_find_toponym.setGeometry(0, 0, 500, 30)
         self.edt_find_toponym.setStyleSheet('background: white')
-
         self.btn_find_toponym = QtWidgets.QPushButton(self)
         self.btn_find_toponym.setText('Найти!')
-        self.btn_find_toponym.setGeometry(450, 0, 70, 30)
+        self.btn_find_toponym.setGeometry(500, 0, 100, 30)
         self.btn_find_toponym.clicked.connect(self.switch_toponym)
+
+        # Кнопка сброса запроса
+        self.btn_clear_toponym = QtWidgets.QPushButton(self)
+        self.btn_clear_toponym.setText('Сброс')
+        self.btn_clear_toponym.setGeometry(500, 30, 50, 30)
+        self.btn_clear_toponym.clicked.connect(self.clear_toponym)
 
         # Изменение вида карты
         self.btn_box_map_types = QtWidgets.QPushButton(self)
         self.btn_box_map_types.setText('Тип')
-        self.btn_box_map_types.setGeometry(self.width - 80, 0, 80, 30)
+        self.btn_box_map_types.setGeometry(self.width - 50, 30, 50, 30)
         self.btn_box_map_types.clicked.connect(self.switch_map_type)
 
         # Рамка для картинки
         self.frame_for_picture = QtWidgets.QLabel(self)
-        self.frame_for_picture.setGeometry(0, 30, self.width, self.height - 20 - 30)
+        self.frame_for_picture.setGeometry(0, 60, self.width, self.height - 20 - 30 - 30)
         self.frame_for_picture.setStyleSheet('background: white')
 
         # Рамка для отображения информации
@@ -69,8 +74,10 @@ class MainApp(QtWidgets.QWidget):
         self.lbl_z = QtWidgets.QLabel(self.frame_settings_for_search)
         self.lbl_z.setGeometry(200, 0, 100, 20)
 
+        self.search()
+
     def search(self):
-        # Получаемся картинку
+        # Получаем картинку
         pixmap = get_map_image((self.x, self.y), self.z, self.map_type, self.coords_for_dota)
         resize_coef = min(self.frame_for_picture.width() / pixmap.width(),
                           self.frame_for_picture.height() / pixmap.height())
@@ -84,6 +91,12 @@ class MainApp(QtWidgets.QWidget):
 
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
+
+    def clear_toponym(self):
+        self.toponym = ''
+        self.edt_find_toponym.setText('')
+        self.coords_for_dota = None
+        self.search()
 
     def switch_map_type(self):
         # Переключаем на следующую карту
