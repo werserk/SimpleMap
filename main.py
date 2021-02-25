@@ -76,6 +76,7 @@ class MainApp(QtWidgets.QWidget):
         self.frame_for_picture.setPixmap(pixmap)
 
     def switch_map_type(self):
+        # Находим нынешнюю карту и переключаем на следующую
         text = self.btn_box_map_types.text()
         ind = (self.map_types.index(text) + 1) % 3
         new_text = self.map_types[ind]
@@ -113,7 +114,6 @@ class MainApp(QtWidgets.QWidget):
 
     def keyPressEvent(self, e):
         if e.type() == QtCore.QEvent.KeyPress:
-            print(e.key())
             if e.key() == KEY_LEFT:
                 self.cmd_key_left()
             if e.key() == KEY_RIGHT:
