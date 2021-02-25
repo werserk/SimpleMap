@@ -2,10 +2,10 @@ import sys
 from PyQt5 import Qt, QtWidgets, QtCore
 from MapRequest import get_map_image
 
-KEY_LEFT = 16777234
-KEY_UP = 16777235
-KEY_RIGHT = 16777236
-KEY_DOWN = 16777237
+KEY_LEFT = 65  # 16777234
+KEY_UP = 87  # 16777235
+KEY_RIGHT = 68  # 16777236
+KEY_DOWN = 83  # 16777237
 
 
 class MainApp(QtWidgets.QWidget):
@@ -33,10 +33,11 @@ class MainApp(QtWidgets.QWidget):
         self.setWindowTitle('Карты')
 
         # Изменение вида карты
-        self.combo_box_map_types = QtWidgets.QComboBox(self)
-        self.combo_box_map_types.setGeometry(self.width - 80, 0, 80, 30)
-        self.combo_box_map_types.addItems(['map', 'sat', 'sat,skl'])
-        self.combo_box_map_types.activated[str].connect(self.onActivated)
+        self.map_types = ['map', 'sat', 'sat,skl']
+        self.btn_box_map_types = QtWidgets.QPushButton(self)
+        self.btn_box_map_types.setText(self.map_type)
+        self.btn_box_map_types.setGeometry(self.width - 80, 0, 80, 30)
+        self.btn_box_map_types.clicked.connect(self.switch_map_type)
 
         # Рамка для картинки
         self.frame_for_picture = QtWidgets.QLabel(self)
@@ -55,7 +56,7 @@ class MainApp(QtWidgets.QWidget):
         self.lbl_z = QtWidgets.QLabel(self.frame_settings_for_search)
         self.lbl_z.setGeometry(200, 0, 100, 20)
 
-        # Отобазим картинку
+        # Отобразим картинку
         self.search()
 
     def search(self):
@@ -74,44 +75,45 @@ class MainApp(QtWidgets.QWidget):
         # Отображаем картинку
         self.frame_for_picture.setPixmap(pixmap)
 
-    def onActivated(self, text):
-        self.map_type = text
+    def switch_map_type(self):
+        text = self.btn_box_map_types.text()
+        ind = (self.map_types.index(text) + 1) % 3
+        new_text = self.map_types[ind]
+        self.btn_box_map_types.setText(new_text)
+        self.map_type = new_text
         self.search()
 
     def cmd_wheel_up(self):
         self.z += 1
         if self.z >= 17:
             self.z = 17
-
-        # Отобразим картинку
         self.search()
 
     def cmd_wheel_down(self):
         self.z -= 1
         if self.z <= 0:
             self.z = 0
-
-        # Отобразим картинку
         self.search()
 
     def cmd_key_left(self):
-        self.x -= 1 / self.z
+        self.x -= 1 / self.z ** 2
         self.search()
 
     def cmd_key_right(self):
-        self.x += 1 / self.z
+        self.x += 1 / self.z ** 2
         self.search()
 
     def cmd_key_up(self):
-        self.y += 1 / self.z
+        self.y += 1 / self.z ** 2.4
         self.search()
 
     def cmd_key_down(self):
-        self.y -= 1 / self.z
+        self.y -= 1 / self.z ** 2.4
         self.search()
 
     def keyPressEvent(self, e):
         if e.type() == QtCore.QEvent.KeyPress:
+            print(e.key())
             if e.key() == KEY_LEFT:
                 self.cmd_key_left()
             if e.key() == KEY_RIGHT:
