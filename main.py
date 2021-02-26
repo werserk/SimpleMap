@@ -105,13 +105,18 @@ class MainApp(QtWidgets.QWidget):
         self.search()
 
     def switch_toponym(self):
-        self.toponym = self.edt_find_toponym.text()
-        response = get_map_coords(self.toponym)
+        # Искомый топоним в поле ввода
+        toponym = self.edt_find_toponym.text()
+
+        # Получаем ответ от серера
+        response = get_map_coords(toponym)
         if isinstance(response, str):
-            QtWidgets.QMessageBox.question(self, response)
+            self.msg_box = QtWidgets.QMessageBox.question(self.frame_for_picture, 'Результат запроса', 'Не найдено',
+                                                          QtWidgets.QMessageBox.Cancel)
         else:
             self.x, self.y = response
             self.coords_for_dota = response
+            self.toponym = toponym
         self.search()
 
     def cmd_wheel_up(self):
