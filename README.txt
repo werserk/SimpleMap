@@ -1,3 +1,4 @@
-Packages to download:
-> PyQt5 - 5.15.2
-> requests - 2.25.1
+# SimpleMap
+## Overview
+Yandex.Lyceum homework
+Simple app with map
